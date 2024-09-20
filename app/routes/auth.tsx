@@ -1,11 +1,8 @@
+import AuthForm from '~/components/auth/AuthForm'
 import authStyles from '~/styles/auth.css'
 
 export default function AuthPage() {
-  return (
-    <main>
-      <h1>The user authentication page</h1>
-    </main>
-  )
+  return <AuthForm />
 }
 
 export function links() {
