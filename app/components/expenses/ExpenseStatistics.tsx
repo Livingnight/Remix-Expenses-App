@@ -4,23 +4,22 @@ function calculateSummaryStatistics(expenses) {
   const amounts = expenses.map(expense => +expense.amount)
   const maxAmount = Math.max(...amounts)
   const minAmount = Math.min(...amounts)
-  const sum = expenses.reduce((prevVal, curVal) => {
-    curVal.amount + prevVal
-  }, 0)
+  const sum = expenses.reduce((prevVal, curVal) => curVal.amount + prevVal, 0)
   const mean = sum / expenses.length
+
   return { minAmount, maxAmount, sum, mean }
 }
 
 function ExpenseStatistics({ expenses }) {
   const { minAmount, maxAmount, sum, mean } = useMemo(
     () => calculateSummaryStatistics(expenses),
-    expenses
+    [expenses]
   )
 
   return (
     <section>
       <h2>Summary Statistics</h2>
-      <dl className='expense-statistics'>
+      <dl id='expense-statistics'>
         <div>
           <dt>Total</dt>
           <dd>${sum.toFixed(2)}</dd>
@@ -30,11 +29,11 @@ function ExpenseStatistics({ expenses }) {
           <dd>${mean.toFixed(2)}</dd>
         </div>
         <div>
-          <dt>Min. Amount</dt>
+          <dt> Min. Amount</dt>
           <dd>${minAmount.toFixed(2)}</dd>
         </div>
         <div>
-          <dt>Max Amount</dt>
+          <dt>Max. Amount</dt>
           <dd>${maxAmount.toFixed(2)}</dd>
         </div>
       </dl>

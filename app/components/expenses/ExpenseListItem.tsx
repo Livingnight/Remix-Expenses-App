@@ -7,7 +7,7 @@ function ExpenseListItem({ title, amount }) {
     <article className='expense-item'>
       <div>
         <h2 className='expense-title'>{title}</h2>
-        <p className='expense-amount'>{amount.toFixed(2)}</p>
+        <p className='expense-amount'>${amount.toFixed(2)}</p>
       </div>
       <menu className='expense-actions'>
         <button onCkick={deleteExpenseItemHandler}>Delete</button>
