@@ -6,6 +6,7 @@ function ExpensesList({ expenses }) {
       {expenses.map(expense => (
         <li key={expense.id}>
           <ExpenseListItem
+            id={expense.id}
             title={expense.title}
             amount={expense.amount}
           />

@@ -1,4 +1,6 @@
-function ExpenseListItem({ title, amount }) {
+import { Link } from '@remix-run/react'
+
+function ExpenseListItem({ id, title, amount }) {
   function deleteExpenseItemHandler() {
     // TODO: implement a delete expense item handler
   }
@@ -11,7 +13,7 @@ function ExpenseListItem({ title, amount }) {
       </div>
       <menu className='expense-actions'>
         <button onCkick={deleteExpenseItemHandler}>Delete</button>
-        <a href='tbd'>Edit</a>
+        <Link to={id}>Edit</Link>
       </menu>
     </article>
   )
