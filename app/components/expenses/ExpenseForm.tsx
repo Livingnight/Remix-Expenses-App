@@ -1,3 +1,5 @@
+import { Link } from '@remix-run/react'
+
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10)
 
@@ -42,7 +44,7 @@ function ExpenseForm() {
       </div>
       <div className='form-actions'>
         <button>Save Expense</button>
-        <a href='tbd'>Cancel</a>
+        <Link to='/expenses'>Cancel</Link>
       </div>
     </form>
   )
