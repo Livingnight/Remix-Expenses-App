@@ -3,6 +3,7 @@ import { Link } from '@remix-run/react'
 function ExpenseListItem({ id, title, amount }) {
   function deleteExpenseItemHandler() {
     // TODO: implement a delete expense item handler
+    console.log('delete button clicked')
   }
 
   return (
