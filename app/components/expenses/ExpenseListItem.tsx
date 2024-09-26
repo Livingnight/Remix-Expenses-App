@@ -1,9 +1,11 @@
 import { Link } from '@remix-run/react'
+import { deleteExpense } from '~/data/expenses.server'
 
 function ExpenseListItem({ id, title, amount }) {
   function deleteExpenseItemHandler() {
     // TODO: implement a delete expense item handler
     console.log('delete button clicked')
+    deleteExpense(id)
   }
 
   return (
@@ -20,4 +22,11 @@ function ExpenseListItem({ id, title, amount }) {
   )
 }
 
+// export async function action({ request, params }) {
+//   console.log(params)
+//   console.log(request)
+//   return await deleteExpense(id)
+//   return null
+// }
+//
 export default ExpenseListItem

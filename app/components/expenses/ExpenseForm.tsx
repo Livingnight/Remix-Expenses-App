@@ -2,7 +2,7 @@ import {
   Form,
   Link,
   useActionData,
-  useLoaderData,
+  useMatches,
   useNavigation,
 } from '@remix-run/react'
 
@@ -23,7 +23,15 @@ function ExpenseForm() {
   const navigation = useNavigation()
   const isSubmitting = navigation.state !== 'idle'
 
-  const expenseToEdit = useLoaderData()
+  // const expenseToEdit = useLoaderData()
+  // TODO: Already done. Switched from using loader to using useMatch hook to reduce api calls on page reload.
+  const matches = useMatches()
+  const expenseId = matches[0].params.id
+
+  const expenseToEdit = matches
+    .slice(-2)[0]
+    .data.find(expense => expense.id === expenseId)
+
   const defaultExpenseData = expenseToEdit
     ? {
         title: expenseToEdit.title,
@@ -38,7 +46,7 @@ function ExpenseForm() {
 
   return (
     <Form
-      method='post'
+      method={expenseId ? 'PUT' : 'POST'}
       className='form'
       id='expense-form'
       // onSubmit={submitHandler}
@@ -92,9 +100,15 @@ function ExpenseForm() {
         </ul>
       )}
       <div className='form-actions'>
-        <button disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : 'Save Expense'}
-        </button>
+        {expenseId ? (
+          <button disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Update Expense'}
+          </button>
+        ) : (
+          <button disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save Expense'}
+          </button>
+        )}
         <Link to='..'>Cancel</Link>
       </div>
     </Form>
