@@ -1,4 +1,10 @@
-import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from '@remix-run/react'
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10) // yields something like 2023-09-10
@@ -17,6 +23,19 @@ function ExpenseForm() {
   const navigation = useNavigation()
   const isSubmitting = navigation.state !== 'idle'
 
+  const expenseToEdit = useLoaderData()
+  const defaultExpenseData = expenseToEdit
+    ? {
+        title: expenseToEdit.title,
+        amount: expenseToEdit.amount,
+        date: expenseToEdit.date,
+      }
+    : {
+        title: '',
+        amount: '',
+        date: '',
+      }
+
   return (
     <Form
       method='post'
@@ -32,6 +51,7 @@ function ExpenseForm() {
           name='title'
           required
           maxLength={30}
+          defaultValue={defaultExpenseData.title}
         />
       </p>
 
@@ -45,6 +65,7 @@ function ExpenseForm() {
             min='0'
             step='0.01'
             required
+            defaultValue={defaultExpenseData.amount}
           />
         </p>
         <p>
@@ -55,6 +76,11 @@ function ExpenseForm() {
             name='date'
             max={today}
             required
+            defaultValue={
+              defaultExpenseData.date
+                ? defaultExpenseData.date.slice(0, 10)
+                : ''
+            }
           />
         </p>
       </div>

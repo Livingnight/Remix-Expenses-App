@@ -23,7 +23,7 @@ import { json } from '@remix-run/node'
 
 export default function ExpensesLayout() {
   const expenses = useLoaderData()
-  console.log('Expenses from main Expenses page: ', expenses)
+
   return (
     <>
       <Outlet />
@@ -44,8 +44,6 @@ export default function ExpensesLayout() {
   )
 }
 
-export async function loader() {
-  const retrievedExpenses = await findExpenses()
-  console.log(retrievedExpenses)
-  return json(retrievedExpenses)
+export function loader() {
+  return findExpenses()
 }

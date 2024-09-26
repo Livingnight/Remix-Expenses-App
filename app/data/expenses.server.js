@@ -20,18 +20,22 @@ export async function addExpense(expenseData) {
 
 export async function findExpenses() {
   try {
-    return await prisma.expense.findMany()
+    const expenses = await prisma.expense.findMany({
+      orderBy: { date: 'desc' },
+    })
+    return expenses
   } catch (error) {
     console.log(error)
     throw error
   }
 }
 
-export async function findOneExpense(id) {
+export async function findExpense(id) {
   try {
     console.log('Prisma function Id: ', id)
-    const expense = await prisma.expense.findMany()
+    const expense = await prisma.expense.findFirst({ where: { id } })
     console.log('Found Expense: ', expense)
+    return expense
   } catch (error) {
     throw error
   }
