@@ -4,6 +4,7 @@ import {
   useActionData,
   useMatches,
   useNavigation,
+  useParams,
 } from '@remix-run/react'
 
 function ExpenseForm() {
@@ -26,12 +27,14 @@ function ExpenseForm() {
   // const expenseToEdit = useLoaderData()
   // TODO: Already done. Switched from using loader to using useMatch hook to reduce api calls on page reload.
   const matches = useMatches()
-  const expenseId = matches[0].params.id
+  const params = useParams()
 
-  const expenseToEdit = matches
-    .slice(-2)[0]
-    .data.find(expense => expense.id === expenseId)
+  const expenses = matches.find(
+    match => match.id === 'routes/__app/expenses'
+  ).data
+  console.log(matches)
 
+  const expenseToEdit = expenses.find(expense => expense.id === params.id)
   const defaultExpenseData = expenseToEdit
     ? {
         title: expenseToEdit.title,
@@ -46,7 +49,7 @@ function ExpenseForm() {
 
   return (
     <Form
-      method={expenseId ? 'PUT' : 'POST'}
+      method={params.id ? 'PUT' : 'POST'}
       className='form'
       id='expense-form'
       // onSubmit={submitHandler}
@@ -100,7 +103,7 @@ function ExpenseForm() {
         </ul>
       )}
       <div className='form-actions'>
-        {expenseId ? (
+        {params.id ? (
           <button disabled={isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Update Expense'}
           </button>
