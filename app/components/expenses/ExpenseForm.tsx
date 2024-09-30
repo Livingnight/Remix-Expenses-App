@@ -35,6 +35,7 @@ function ExpenseForm() {
   console.log(matches)
 
   const expenseToEdit = expenses.find(expense => expense.id === params.id)
+
   const defaultExpenseData = expenseToEdit
     ? {
         title: expenseToEdit.title,

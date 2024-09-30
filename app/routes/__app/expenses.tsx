@@ -19,7 +19,6 @@ import { FaPlus, FaDownload } from 'react-icons/fa'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import ExpensesList from '~/components/expenses/ExpensesList'
 import { findExpenses } from '~/data/expenses.server'
-import { json } from '@remix-run/node'
 
 export default function ExpensesLayout() {
   const expenses = useLoaderData()
@@ -43,6 +42,8 @@ export default function ExpensesLayout() {
     </>
   )
 }
+
+export function ErrorBoundary() {}
 
 export function loader() {
   return findExpenses()
