@@ -1,24 +1,72 @@
-import { Link } from '@remix-run/react'
+import {
+  Form,
+  Link,
+  useActionData,
+  useMatches,
+  useNavigation,
+  useParams,
+} from '@remix-run/react'
 
 function ExpenseForm() {
-  const today = new Date().toISOString().slice(0, 10)
+  const today = new Date().toISOString().slice(0, 10) // yields something like 2023-09-10
+  const validationErrors = useActionData()
+  // const submit = useSubmit();
+
+  // function submitHandler(event) {
+  //   event.preventDefault();
+  //   // perform your own validation
+  //   // ...
+  //   submit(event.target, {
+  //     // action: '/expenses/add',
+  //     method: 'post',
+  //   });
+  // }
+  const navigation = useNavigation()
+  const isSubmitting = navigation.state !== 'idle'
+
+  // const expenseToEdit = useLoaderData()
+  // TODO: Already done. Switched from using loader to using useMatch hook to reduce api calls on page reload.
+  const matches = useMatches()
+  const params = useParams()
+
+  const expenses = matches.find(
+    match => match.id === 'routes/__app/expenses'
+  ).data
+  console.log(matches)
+
+  const expenseToEdit = expenses.find(expense => expense.id === params.id)
+
+  const defaultExpenseData = expenseToEdit
+    ? {
+        title: expenseToEdit.title,
+        amount: expenseToEdit.amount,
+        date: expenseToEdit.date,
+      }
+    : {
+        title: '',
+        amount: '',
+        date: '',
+      }
 
   return (
-    <form
-      method='post'
+    <Form
+      method={params.id ? 'PUT' : 'POST'}
       className='form'
       id='expense-form'
+      // onSubmit={submitHandler}
     >
       <p>
         <label htmlFor='title'>Expense Title</label>
         <input
           type='text'
-          name='title'
           id='title'
+          name='title'
           required
           maxLength={30}
+          defaultValue={defaultExpenseData.title}
         />
       </p>
+
       <div className='form-row'>
         <p>
           <label htmlFor='amount'>Amount</label>
@@ -29,6 +77,7 @@ function ExpenseForm() {
             min='0'
             step='0.01'
             required
+            defaultValue={defaultExpenseData.amount}
           />
         </p>
         <p>
@@ -39,14 +88,34 @@ function ExpenseForm() {
             name='date'
             max={today}
             required
-          ></input>
+            defaultValue={
+              defaultExpenseData.date
+                ? defaultExpenseData.date.slice(0, 10)
+                : ''
+            }
+          />
         </p>
       </div>
+      {validationErrors && (
+        <ul>
+          {Object.values(validationErrors).map(error => (
+            <li key={error}>{error}</li>
+          ))}
+        </ul>
+      )}
       <div className='form-actions'>
-        <button>Save Expense</button>
-        <Link to='/expenses'>Cancel</Link>
+        {params.id ? (
+          <button disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Update Expense'}
+          </button>
+        ) : (
+          <button disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save Expense'}
+          </button>
+        )}
+        <Link to='..'>Cancel</Link>
       </div>
-    </form>
+    </Form>
   )
 }
 
