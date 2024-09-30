@@ -2,6 +2,9 @@ import { Form, Link, useFetcher, useSubmit } from '@remix-run/react'
 import { deleteExpense } from '~/data/expenses.server'
 
 function ExpenseListItem({ id, title, amount }) {
+  // NOTE: The useSubmit hook for programatically submitting forms. Equivalent to a regular
+  // <form> that causes page reload. Not what we want in an SPA
+
   // const submit = useSubmit()
   const fetch = useFetcher()
 
@@ -9,6 +12,7 @@ function ExpenseListItem({ id, title, amount }) {
     console.log('delete button clicked')
     // NOTE: submit still causes page to reload. Not great in a SPA.
     // submit(null, { method: 'delete', action: `/expenses/${id}` })
+
     const proceed = confirm('Are you sure you want to delete?')
 
     if (!proceed) {
@@ -16,6 +20,14 @@ function ExpenseListItem({ id, title, amount }) {
     }
 
     fetch.submit(null, { method: 'delete', action: `/expenses/${id}` })
+  }
+
+  if (fetch.state !== 'idle') {
+    return (
+      <article className='expense-item locked'>
+        <p>Deleting...</p>
+      </article>
+    )
   }
 
   return (
